@@ -22,9 +22,9 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-   public function down(): void
-{
-    Schema::dropIfExists('file_up');
-}
+    public function down(): void
+    {
+        Schema::dropIfExists('file_up');
+    }
 
 };

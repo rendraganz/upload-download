@@ -6,17 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\FileUp;
 
-class  FileUpController extends Controller
+class FileUpController extends Controller
 {
-    public function form_upload()
+    public function index()
     {
-        return view('file.upload');
+        $files = FileUp::latest()->get(); // ambil semua file
+        return view('file.upload', compact('files'));
     }
 
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:16384', // max 16MB
+            'file' => 'required|file|max:16384',
         ]);
 
         if ($request->file('file')->isValid()) {
@@ -27,16 +28,10 @@ class  FileUpController extends Controller
                 'path' => $path,
             ]);
 
-            return redirect()->route('file.upload')->with('success', 'File berhasil diupload!');
+            return redirect()->route('file.index')->with('success', 'File berhasil diupload!');
         }
 
         return back()->withErrors(['file' => 'Gagal mengupload file.']);
-    }
-
-    public function show($id)
-    {
-        $file = FileUp::findOrFail($id);
-        return view('file.show', compact('file'));
     }
 
     public function download($id)
